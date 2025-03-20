@@ -22,9 +22,11 @@
   |일정 수정|PUT|/api/schedule/{schedule}|요청 body|수정정보|203: 정상수정|
   |일정 삭제|DELETE|/api/schedule/{schedule}|요청 parama|-|204: 정상삭제|
   
-  [ ]  ERD 작성하기
+  [✔️]  ERD 작성하기
+
+  ![Image](https://github.com/user-attachments/assets/1fb8d829-06c3-4bf2-814c-d24982cd344e)
   
-  [ ]  SQL 작성하기
+  [✔️]  SQL 작성하기
   
     
 
