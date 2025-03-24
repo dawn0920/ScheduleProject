@@ -39,22 +39,29 @@ public class ScheduleController {
     // 전체 일정 조회 (조건에 따라 일정 불러오는 쿼리도 추가)
     @GetMapping
     public List<ScheduleResponseDto> findAllSchedule(
-            @RequestBody ScheduleCheckRequstDto scheduleCheckRequstDto
+            @RequestBody ScheduleCheckRequestDto scheduleCheckRequestDto
     ) {
-
         // init LIst
         List<ScheduleResponseDto> responseList = new ArrayList<>();
 
-        if (scheduleCheckRequstDto.getName() == null &&
-                scheduleCheckRequstDto.getDate_correction() == null) {
+        LocalDate scheduleDate = scheduleCheckRequestDto.getDate_correction();
+        String name = scheduleCheckRequestDto.getName();
 
-        }
-
-        // for문을 이용해 list값 꺼내기
         for (Schedule schedule : scheduleList.values()) {
-            ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule);
-            responseList.add(responseDto);
+            boolean conditionDate = (scheduleDate == null || schedule.getDate_correction().equals(scheduleDate));
+            boolean conditionName = (name == null || schedule.getName().equalsIgnoreCase(name)); // equalsIgnoreCase을 사용하면 대소문자를 신경쓰지 않고 일치하는 결과를 찾음
+
+           if (conditionDate && conditionName) {
+               responseList.add(new ScheduleResponseDto(schedule));
+           }
         }
+
+        // 내림차순
+        responseList.sort(Comparator.comparing(
+                ScheduleResponseDto::getDate_correction,
+                Comparator.nullsLast(Comparator.naturalOrder())
+        ).reversed());
+
         return responseList;
     }
 

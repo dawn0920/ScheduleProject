@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class ScheduleCheckRequstDto {
+public class ScheduleCheckRequestDto {
     private String name;
     private LocalDate date_correction;
 }
