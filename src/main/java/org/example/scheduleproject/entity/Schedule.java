@@ -20,8 +20,7 @@ public class Schedule {
     private LocalDate date_post;
     private LocalDate date_correction;
 
-    public Schedule(int schedule_id, String schedule, String name, String password){
-        this.schedule_id = schedule_id;
+    public Schedule(String schedule, String name, String password){
         this.schedule = schedule;
         this.name = name;
         this.password = password;

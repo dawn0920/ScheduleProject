@@ -2,6 +2,7 @@ package org.example.scheduleproject.controller;
 
 import org.example.scheduleproject.dto.*;
 import org.example.scheduleproject.entity.Schedule;
+import org.example.scheduleproject.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,25 @@ import java.util.*;
 @RequestMapping("/schedules")
 public class ScheduleController {
 
+    // 이해 필요
+    private final ScheduleService scheduleService;
+
+    public ScheduleController(ScheduleService scheduleService) {
+        this.scheduleService = scheduleService;
+    }
+
+    @PostMapping
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
+        ScheduleResponseDto createdSchedule = scheduleService.createSchedule(requestDto);
+        return new ResponseEntity<>(createdSchedule, HttpStatus.CREATED);
+    }
+
+
     // 후에 DB에 저장하는 구도는 다시 구해야함.
     private final Map<Integer, Schedule> scheduleList = new HashMap<>();
 
     // 처음 데이터 저장
+    /*
     @PostMapping
     public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto requestDto) {
         // id 값이 1씩 증가함
@@ -34,7 +50,7 @@ public class ScheduleController {
 
         return new ScheduleResponseDto(schedule);
 
-    }
+    } */
 
     // 전체 일정 조회 (조건에 따라 일정 불러오는 쿼리도 추가)
     @GetMapping
