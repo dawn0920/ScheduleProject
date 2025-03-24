@@ -13,15 +13,15 @@ public interface ScheduleService {
     ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto);
 
     // 전체 일정 조회
-    List<ScheduleResponseDto> findAllSchedule(ScheduleCheckRequestDto scheduleCheckRequestDto);
+    List<ScheduleResponseDto> findAllSchedule();
 
     // 선택 일정 조회
-    ResponseEntity<ScheduleResponseDto> findScheduleById(int schedule_id);
+    ScheduleResponseDto findScheduleById(int schedule_id);
 
     // 선택 일정 수정
-    ResponseEntity<ScheduleResponseDto> updateSchedule(int schedule_id, ScheduleUpdateRequestDto requestDto);
+    ScheduleResponseDto updateSchedule(int schedule_id, ScheduleUpdateRequestDto requestDto);
 
     // 선택 일정 삭제
-    ResponseEntity<Void> deleteSchedule(int schedule_id, PasswordRequestDto passwordRequestDto);
+    void deleteSchedule(int schedule_id, String password);
 
 }

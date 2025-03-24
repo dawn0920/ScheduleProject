@@ -3,11 +3,8 @@ package org.example.scheduleproject.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.example.scheduleproject.dto.ScheduleRequestDto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -31,5 +28,9 @@ public class Schedule {
     public void update(String newSchedule){
         this.schedule = newSchedule;
         this.date_correction = LocalDate.now(); // 수정 당시 날짜 입력
+    }
+
+    public void setSchedule_id(int schedule_id) {
+        this.schedule_id = schedule_id;
     }
 }

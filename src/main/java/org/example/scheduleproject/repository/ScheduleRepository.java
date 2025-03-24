@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ScheduleRepository {
-    void save(Schedule schedule); // Schedule 저장
+    int save(Schedule schedule); // Schedule 저장
     List<Schedule> findAllSchedule(); // List<Schedule> 반환
     Schedule findById(int schedule_id); // Schedule 반환
     void update(Schedule schedule); // Schedule 업데이트

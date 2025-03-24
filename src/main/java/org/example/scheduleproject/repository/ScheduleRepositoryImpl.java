@@ -20,10 +20,21 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public void save(Schedule schedule) {
+    public int save(Schedule schedule) {
         String sql =
                 "Insert INTO schedule (schedule, name, password, date_post) VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(sql, schedule.getSchedule(), schedule.getName(), schedule.getPassword(), schedule.getDate_post());
+
+        // 마지막으로 삽입된 ID를 가지고 오기 위한 SQL
+        String lastSql = "SELECT LAST_INSERT_ID()";
+        // queryForObject()를 사용하여 마지막으로 삽입된 레코드의 ID 값을 가져옴
+        int increment_id = jdbcTemplate.queryForObject(lastSql, Integer.class);
+
+        // 삽입된 schedule 객체에 자동 증가된 ID 값을 설정
+        schedule.setSchedule_id(increment_id);
+
+        // 값을 반환
+        return increment_id;
     }
 
     @Override
