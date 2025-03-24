@@ -1,12 +1,12 @@
 package org.example.scheduleproject.controller;
 
-import org.example.scheduleproject.dto.ScheduleRequestDto;
-import org.example.scheduleproject.dto.ScheduleResponseDto;
+import org.example.scheduleproject.dto.*;
 import org.example.scheduleproject.entity.Schedule;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -23,7 +23,11 @@ public class ScheduleController {
         int scheduleId = scheduleList.isEmpty() ? 1 : Collections.max(scheduleList.keySet()) + 1;
 
         // 요청받은 데이터로 객체 생성
-        Schedule schedule = new Schedule(scheduleId, requestDto.getSchedule(), requestDto.getName(), requestDto.getPassword(), requestDto.getDate_post(), requestDto.getDate_correction());
+        Schedule schedule = new Schedule(
+                scheduleId,
+                requestDto.getSchedule(),
+                requestDto.getName(),
+                requestDto.getPassword());
 
         // Inmemory DB에 객체 저장
         scheduleList.put(scheduleId, schedule);
@@ -32,12 +36,19 @@ public class ScheduleController {
 
     }
 
-    // 전체 일정 조회 기본(조건에 따라 일정 불러오는 쿼리도 추가)
+    // 전체 일정 조회 (조건에 따라 일정 불러오는 쿼리도 추가)
     @GetMapping
-    public List<ScheduleResponseDto> findAllSchedule() {
+    public List<ScheduleResponseDto> findAllSchedule(
+            @RequestBody ScheduleCheckRequstDto scheduleCheckRequstDto
+    ) {
 
         // init LIst
         List<ScheduleResponseDto> responseList = new ArrayList<>();
+
+        if (scheduleCheckRequstDto.getName() == null &&
+                scheduleCheckRequstDto.getDate_correction() == null) {
+
+        }
 
         // for문을 이용해 list값 꺼내기
         for (Schedule schedule : scheduleList.values()) {
@@ -61,7 +72,7 @@ public class ScheduleController {
     @PutMapping("{schedule_id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(
             @PathVariable int schedule_id,
-            @RequestBody ScheduleRequestDto requestDto
+            @RequestBody ScheduleUpdateRequestDto requestDto
     ) {
         Schedule schedule = scheduleList.get(schedule_id);
 
@@ -71,35 +82,44 @@ public class ScheduleController {
         }
 
         // 필수값 검증
-        if(requestDto.getSchedule() == null ||
-            requestDto.getName() == null ||
-            requestDto.getPassword() == null) {
+        if(requestDto.getScheduleRequestDto().getSchedule() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        // 비밀번호가 일치하지 않으면 반환
+        if(!schedule.getPassword().equals(requestDto.getPasswordRequestDto().getPassword())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         // 일정 수정
-        schedule.update(requestDto);
+        schedule.update(requestDto.getScheduleRequestDto().getSchedule());
 
         // 응답
         return new ResponseEntity<>(new ScheduleResponseDto(schedule), HttpStatus.OK);
     }
 
     // 선택한 일정 삭제
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable int schedule_id) {
-        // 리스트의 key 값에 id를 포함하고 있다면?
-        if(scheduleList.containsKey(schedule_id)) {
-            // key가 id인 value 삭제
-            scheduleList.remove(schedule_id);
+    @DeleteMapping("/{schedule_id}")
+    public ResponseEntity<Void> deleteSchedule(
+            @PathVariable int schedule_id,
+            @RequestBody PasswordRequestDto passwordRequestDto
+    ) {
+        Schedule schedule = scheduleList.get(schedule_id);
 
-            return new ResponseEntity<>(HttpStatus.OK);
+        // NPE 방지
+        if (schedule == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        if (!schedule.getPassword().equals(passwordRequestDto.getPassword())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        scheduleList.remove(schedule_id);
 
         // 포함하고 있지 않은 경우
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-
 
 
 
