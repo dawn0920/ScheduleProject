@@ -10,7 +10,8 @@ import java.util.List;
 public interface ScheduleService {
     // 서비스 인터페이스는 비즈니스 로직을 정의한다 (각 메소드가 어떤 작업을 수행할 것인지 정의)
     // 첫 데이터 저장
-    ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto);
+//    ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto);
+    ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, UserRequestDto userRequestDto);
 
     // 전체 일정 조회
     List<ScheduleResponseDto> findAllSchedule();

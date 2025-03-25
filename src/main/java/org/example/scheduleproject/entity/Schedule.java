@@ -16,13 +16,15 @@ public class Schedule {
     private String password;
     private LocalDate date_post;
     private LocalDate date_correction;
+    private int user_id;
 
-    public Schedule(String schedule, String name, String password){
+    public Schedule(String schedule, String name, String password, int user_id){
         this.schedule = schedule;
         this.name = name;
         this.password = password;
         this.date_post = LocalDate.now(); // 작성 당시 날짜 입력
         this.date_correction = null;
+        this.user_id = user_id;
     }
 
     public void update(String newSchedule){
@@ -30,6 +32,7 @@ public class Schedule {
         this.date_correction = LocalDate.now(); // 수정 당시 날짜 입력
     }
 
+    // save이후 쿼리의 id값을 가져옴
     public void setSchedule_id(int schedule_id) {
         this.schedule_id = schedule_id;
     }

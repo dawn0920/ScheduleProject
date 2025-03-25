@@ -2,7 +2,9 @@ package org.example.scheduleproject.service;
 
 import org.example.scheduleproject.dto.*;
 import org.example.scheduleproject.entity.Schedule;
+import org.example.scheduleproject.entity.Users;
 import org.example.scheduleproject.repository.ScheduleRepository;
+import org.example.scheduleproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,20 +17,42 @@ public class ScheduleServiceImpl implements ScheduleService {
     // 의존성 주입 (데이터베이스 작업을 위한 작업)
     // 이해 필요...
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
-    public ScheduleServiceImpl(ScheduleRepository scheduleRepository) {
+    public ScheduleServiceImpl(ScheduleRepository scheduleRepository, UserRepository userRepository) {
         this.scheduleRepository = scheduleRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, UserRequestDto userRequestDto) {
+        // 사용자가 존재하는지 확인 후 없으면 에러 반환
+        Integer user_id = userRepository.findUserIdByEmail(userRequestDto.getEmail());
+
+        if (user_id == null || user_id == 0) {
+            Users newUser = new Users(userRequestDto.getName(), userRequestDto.getEmail());
+            user_id = userRepository.saveUser(newUser);
+        }
+
         Schedule schedule = new Schedule(
                 requestDto.getSchedule(),
                 requestDto.getName(),
-                requestDto.getPassword()
+                requestDto.getPassword(),
+                user_id
         );
-        scheduleRepository.save(schedule);
-        return new ScheduleResponseDto(schedule);
+
+        int scheduleId = scheduleRepository.save(schedule, user_id);
+        schedule.setSchedule_id(scheduleId);
+
+        Users user = userRepository.findById(user_id);
+        UserResponseDto userResponseDto = new UserResponseDto(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getDate_post(),
+                user.getDate_correction());
+
+        return new ScheduleResponseDto(schedule, userResponseDto);
     }
 
     @Override

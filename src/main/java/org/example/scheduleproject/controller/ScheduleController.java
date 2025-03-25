@@ -5,6 +5,7 @@ import org.example.scheduleproject.entity.Schedule;
 import org.example.scheduleproject.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -22,8 +23,12 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
-        ScheduleResponseDto scheduleResponseDto = scheduleService.createSchedule(requestDto);
+    public ResponseEntity<ScheduleResponseDto> createSchedule(
+            // @RequestBody 동시에 2개 사용 불가능 -> 두개를 하나로 묶기
+            @RequestBody WrapperDto wrapperDto
+    ) {
+        ScheduleResponseDto scheduleResponseDto = scheduleService.createSchedule(
+                wrapperDto.getRequestDto(), wrapperDto.getUserRequestDto());
         return new ResponseEntity<>(scheduleResponseDto, HttpStatus.CREATED);
     }
 

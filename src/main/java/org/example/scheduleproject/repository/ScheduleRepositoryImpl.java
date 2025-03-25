@@ -1,10 +1,10 @@
 package org.example.scheduleproject.repository;
 
 import org.example.scheduleproject.entity.Schedule;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -15,15 +15,17 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     /* 조금 더 이해 필요 */
     private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public ScheduleRepositoryImpl(JdbcTemplate  jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public int save(Schedule schedule) {
+    public int save(Schedule schedule, int user_id) {
         String sql =
-                "Insert INTO schedule (schedule, name, password, date_post) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql, schedule.getSchedule(), schedule.getName(), schedule.getPassword(), schedule.getDate_post());
+                // "Insert INTO schedule (schedule, name, password, date_post) VALUES (?, ?, ?, ?)";
+                "Insert INTO schedule (schedule, name, password, date_post, user_id) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, schedule.getSchedule(), schedule.getName(), schedule.getPassword(), schedule.getDate_post(), user_id);
 
         // 마지막으로 삽입된 ID를 가지고 오기 위한 SQL
         String lastSql = "SELECT LAST_INSERT_ID()";
@@ -51,6 +53,8 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return jdbcTemplate.queryForObject(sql, this::mapRowToSchedule, schedule_id);
     }
 
+
+
     @Override
     public void update(Schedule schedule) {
         String sql =
@@ -72,7 +76,8 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                 rs.getString("name"),
                 rs.getString("password"),
                 rs.getTimestamp("date_post").toLocalDateTime().toLocalDate(),
-                rs.getString("date_correction") != null ? rs.getTimestamp("date_correction").toLocalDateTime().toLocalDate() : null
+                rs.getString("date_correction") != null ? rs.getTimestamp("date_correction").toLocalDateTime().toLocalDate() : null,
+                rs.getInt("user_id")
         );
     }
 
