@@ -7,6 +7,7 @@ import org.example.scheduleproject.exception.InvalidPasswordException;
 import org.example.scheduleproject.exception.ScheduleNotFoundException;
 import org.example.scheduleproject.repository.ScheduleRepository;
 import org.example.scheduleproject.repository.UserRepository;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,10 +57,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         return new ScheduleResponseDto(schedule);
     }
-
+    // 전체 일정 조회
     @Override
-    public List<ScheduleResponseDto> findAllSchedule() {
-        List<Schedule> schedules = scheduleRepository.findAllSchedule();
+    public List<ScheduleResponseDto> findAllSchedule(Integer page, Integer size) {
+        if (page == null | page == 0) page = 1;
+        if (size == null) size = 5;
+        int offset = (page - 1) * size;
+
+        List<Schedule> schedules = scheduleRepository.findAllSchedule(size, offset);
+
         return schedules.stream()
                 .map(schedule -> new ScheduleResponseDto(schedule))
                 .collect(Collectors.toList());
@@ -119,7 +125,5 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .map(schedule -> new ScheduleResponseDto(schedule))
                 .collect(Collectors.toList());
     }
-
-
 
 }

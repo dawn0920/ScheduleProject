@@ -36,4 +36,14 @@ public class Schedule {
     public void setSchedule_id(int schedule_id) {
         this.schedule_id = schedule_id;
     }
+
+    public Schedule(int schedule_id, String schedule, String name, LocalDate date_post, LocalDate date_correction, int user_id) {
+        this.schedule_id = schedule_id;
+        this.schedule = schedule;
+        this.name = name;  // 작성자 이름 추가
+        this.date_post = date_post;
+        this.date_correction = date_correction;
+        this.user_id = user_id;
+    }
+
 }

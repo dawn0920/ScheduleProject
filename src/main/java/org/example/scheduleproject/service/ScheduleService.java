@@ -14,7 +14,7 @@ public interface ScheduleService {
     ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, UserRequestDto userRequestDto);
 
     // 전체 일정 조회
-    List<ScheduleResponseDto> findAllSchedule();
+    List<ScheduleResponseDto> findAllSchedule(Integer page, Integer size);
 
     // 선택 일정 조회
     ScheduleResponseDto findScheduleById(int schedule_id);
@@ -27,6 +27,5 @@ public interface ScheduleService {
 
     // 식별자를 통해 일정 검색
     List<ScheduleResponseDto> findSchedulesByUserId(int user_id);
-
 
 }

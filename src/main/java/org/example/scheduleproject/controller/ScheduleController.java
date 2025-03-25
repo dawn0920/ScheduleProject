@@ -1,5 +1,6 @@
 package org.example.scheduleproject.controller;
 
+import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.example.scheduleproject.dto.*;
 import org.example.scheduleproject.entity.Schedule;
@@ -7,6 +8,7 @@ import org.example.scheduleproject.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -14,6 +16,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/schedules")
+@Validated // 유효성 검사 활성화
 public class ScheduleController {
 
     // 이해 필요
@@ -26,7 +29,7 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(
             // @RequestBody 동시에 2개 사용 불가능 -> 두개를 하나로 묶기
-            @RequestBody WrapperDto wrapperDto
+            @Valid @RequestBody WrapperDto wrapperDto // 유효성 검사 추가
     ) {
         ScheduleResponseDto scheduleResponseDto = scheduleService.createSchedule(
                 wrapperDto.getRequestDto(), wrapperDto.getUserRequestDto());
@@ -35,8 +38,11 @@ public class ScheduleController {
 
     // 전체 일정 조회
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedule() {
-        List<ScheduleResponseDto> schedules  = scheduleService.findAllSchedule();
+    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedule(
+            @RequestParam Integer page,
+            @RequestParam Integer size
+    ) {
+        List<ScheduleResponseDto> schedules  = scheduleService.findAllSchedule(page, size);
         return new ResponseEntity<>(schedules, HttpStatus.OK);
     }
 
