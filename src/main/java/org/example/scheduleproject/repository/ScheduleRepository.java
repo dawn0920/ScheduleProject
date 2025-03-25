@@ -15,4 +15,5 @@ public interface ScheduleRepository {
     void delete(int schedule_id); // schedule_Id 로 삭제
 
     List<Schedule> findAllScheduleByUserId(int user_id);
+
 }

@@ -1,5 +1,6 @@
 package org.example.scheduleproject.controller;
 
+import jakarta.websocket.server.PathParam;
 import org.example.scheduleproject.dto.*;
 import org.example.scheduleproject.entity.Schedule;
 import org.example.scheduleproject.service.ScheduleService;

@@ -28,4 +28,5 @@ public interface ScheduleService {
     // 식별자를 통해 일정 검색
     List<ScheduleResponseDto> findSchedulesByUserId(int user_id);
 
+
 }

@@ -26,6 +26,4 @@ public class ScheduleResponseDto {
         this.date_correction = schedule.getDate_correction();
         this.user_id = schedule.getUser_id();
     }
-
-
 }
