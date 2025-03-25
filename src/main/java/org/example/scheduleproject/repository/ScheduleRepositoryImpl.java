@@ -2,6 +2,7 @@ package org.example.scheduleproject.repository;
 
 import org.example.scheduleproject.entity.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -48,9 +49,14 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     @Override
     public Schedule findById(int schedule_id) {
-        String sql =
-                "SELECT * FROM schedule WHERE schedule_id = ?";
-        return jdbcTemplate.queryForObject(sql, this::mapRowToSchedule, schedule_id);
+        try {
+            String sql =
+                    "SELECT * FROM schedule WHERE schedule_id = ?";
+            return jdbcTemplate.queryForObject(sql, this::mapRowToSchedule, schedule_id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+
     }
 
 
