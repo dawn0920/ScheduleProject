@@ -14,14 +14,16 @@
 
   [✔️]  API 명세서 작성하기
   
-  | 기능 | Method | URL | request | response | 상태코드 |
-  |---|---|---|---|---|---|
-  |일정 등록|POST|/api/schedules|요청 body{ "requestDto" : { "schedule" : "테스트",  "name" : "테스트",  "password" : "테스트" }, "userRequestDto" : { "name" : "테스트23", "email" : "5678@5679" }
-}|등록정보|200: 정상등록|
-  |일정 조회|GET|/api/schedule/{schedule}|요청 parama|응답정보|201: 정상조회|
-  |일정 목록 조회|GET|/api/schedule|요청 parama|응답정보|202: 정상조회|
-  |일정 수정|PUT|/api/schedule/{schedule}|요청 body|수정정보|203: 정상수정|
-  |일정 삭제|DELETE|/api/schedule/{schedule}|요청 parama|-|204: 정상삭제|
+  | 기능             | Method | URL                          | request                                                                                                      | response                                        | 상태코드             |
+|-----------------|--------|------------------------------|--------------------------------------------------------------------------------------------------------------|-------------------------------------------------|----------------------|
+| 일정 등록        | POST   | /schedules                    | 요청 body: `{ "requestDto": { "schedule": "테스트", "name": "테스트", "password": "테스트" }, "userRequestDto": { "name": "테스트23", "email": "5678@5679" } }` | 등록 정보 (`ScheduleResponseDto`)               | 201: 정상 등록       |
+| 전체 일정 조회    | GET    | /schedules                    | 요청 파라미터: `page`, `size` (페이징 처리)                                                                   | 일정 목록 (`List<ScheduleResponseDto>`)         | 200: 정상 조회       |
+| 선택 일정 조회    | GET    | /schedules/{schedule_id}      | 요청 파라미터: `schedule_id` (일정 ID)                                                                          | 일정 정보 (`ScheduleResponseDto`)               | 200: 정상 조회       |
+| 일정 수정        | PUT    | /schedules/{schedule_id}      | 요청 body: `{ "schedule": "새 일정 내용", "password": "비밀번호" }`                                              | 수정된 일정 정보 (`ScheduleResponseDto`)        | 200: 정상 수정       |
+| 일정 삭제        | DELETE | /schedules/{schedule_id}      | 요청 파라미터: `schedule_id`, 요청 body: `{ "password": "비밀번호" }`                                           | 없음                                            | 204: 정상 삭제       |
+| 사용자별 일정 조회| GET    | /schedules/user/{user_id}     | 요청 파라미터: `user_id` (사용자 ID)                                                                            | 일정 목록 (`List<ScheduleResponseDto>`)         | 200: 정상 조회       |
+
+
   
   [✔️]  ERD 작성하기
 
