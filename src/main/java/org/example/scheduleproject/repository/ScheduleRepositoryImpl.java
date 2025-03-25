@@ -54,7 +54,6 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
 
-
     @Override
     public void update(Schedule schedule) {
         String sql =
@@ -66,6 +65,13 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     public void delete(int schedule_id) {
         String sql = "DELETE FROM schedule WHERE schedule_id = ?";
         jdbcTemplate.update(sql, schedule_id);
+    }
+
+    @Override
+    public List<Schedule> findAllScheduleByUserId(int user_id) {
+        String sql =
+             "SELECT * FROM schedule WHERE user_id = ?";
+        return jdbcTemplate.query(sql, this::mapRowToSchedule, user_id);
     }
 
     private Schedule mapRowToSchedule(ResultSet rs, int rowNum)

@@ -52,7 +52,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 user.getDate_post(),
                 user.getDate_correction());
 
-        return new ScheduleResponseDto(schedule, userResponseDto);
+        return new ScheduleResponseDto(schedule);
     }
 
     @Override
@@ -92,5 +92,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         if (schedule != null && schedule.getPassword().equals(password)) {
             scheduleRepository.delete(schedule_id);
         }
+    }
+
+    @Override
+    public List<ScheduleResponseDto> findSchedulesByUserId(int user_id) {
+        List<Schedule> schedules = scheduleRepository.findAllScheduleByUserId(user_id);
+
+        return schedules.stream()
+                .map(schedule -> new ScheduleResponseDto(schedule))
+                .collect(Collectors.toList());
     }
 }

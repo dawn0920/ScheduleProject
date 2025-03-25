@@ -13,4 +13,6 @@ public interface ScheduleRepository {
     Schedule findById(int schedule_id); // Schedule 반환
     void update(Schedule schedule); // Schedule 업데이트
     void delete(int schedule_id); // schedule_Id 로 삭제
+
+    List<Schedule> findAllScheduleByUserId(int user_id);
 }

@@ -14,7 +14,7 @@ public class ScheduleResponseDto {
     private String password;
     private LocalDate date_post;
     private LocalDate date_correction;
-    private UserResponseDto user;
+    private int user_id;
 
     // Schedule class를 인자로 가지는 생성자
     public ScheduleResponseDto(Schedule schedule) {
@@ -24,16 +24,8 @@ public class ScheduleResponseDto {
         this.password = schedule.getPassword();
         this.date_post = schedule.getDate_post();
         this.date_correction = schedule.getDate_correction();
-        this.user = user;
+        this.user_id = schedule.getUser_id();
     }
 
-    public ScheduleResponseDto(Schedule schedule, UserResponseDto userResponseDto) {
-        this.schedule_id = schedule.getSchedule_id();
-        this.schedule = schedule.getSchedule();
-        this.name = schedule.getName();
-        this.password = schedule.getPassword();
-        this.date_post = schedule.getDate_post();
-        this.date_correction = schedule.getDate_correction();
-        this.user = user;
-    }
+
 }

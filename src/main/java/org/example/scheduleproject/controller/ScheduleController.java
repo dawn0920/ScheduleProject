@@ -68,4 +68,13 @@ public class ScheduleController {
         scheduleService.deleteSchedule(schedule_id, passwordRequestDto.getPassword());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    // 식별자를 통해 일정 검색
+    @GetMapping("/user/{user_id}")
+    public ResponseEntity<List<ScheduleResponseDto>> findAllScheduleByUserId(
+            @PathVariable int user_id
+    ) {
+        List<ScheduleResponseDto> schedules  = scheduleService.findSchedulesByUserId(user_id);
+        return new ResponseEntity<>(schedules, HttpStatus.OK);
+    }
 }

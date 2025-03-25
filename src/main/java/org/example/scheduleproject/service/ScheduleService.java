@@ -25,4 +25,7 @@ public interface ScheduleService {
     // 선택 일정 삭제
     void deleteSchedule(int schedule_id, String password);
 
+    // 식별자를 통해 일정 검색
+    List<ScheduleResponseDto> findSchedulesByUserId(int user_id);
+
 }
