@@ -16,7 +16,8 @@
   
   | 기능 | Method | URL | request | response | 상태코드 |
   |---|---|---|---|---|---|
-  |일정 등록|POST|/api/schedule|요청 body{ "schedule" : 일정, "comment" : 내용, "date" : 날짜 }|등록정보|200: 정상등록|
+  |일정 등록|POST|/api/schedules|요청 body{ "requestDto" : { "schedule" : "테스트",  "name" : "테스트",  "password" : "테스트" }, "userRequestDto" : { "name" : "테스트23", "email" : "5678@5679" }
+}|등록정보|200: 정상등록|
   |일정 조회|GET|/api/schedule/{schedule}|요청 parama|응답정보|201: 정상조회|
   |일정 목록 조회|GET|/api/schedule|요청 parama|응답정보|202: 정상조회|
   |일정 수정|PUT|/api/schedule/{schedule}|요청 body|수정정보|203: 정상수정|
