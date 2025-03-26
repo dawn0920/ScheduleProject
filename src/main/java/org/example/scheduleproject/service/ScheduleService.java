@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ScheduleService {
@@ -14,7 +15,8 @@ public interface ScheduleService {
     ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, UserRequestDto userRequestDto);
 
     // 전체 일정 조회
-    List<ScheduleResponseDto> findAllSchedule(Integer page, Integer size);
+    // List<ScheduleResponseDto> findAllSchedule(Integer page, Integer size);
+    List<ScheduleResponseDto> findAllSchedule(Integer page, Integer size, LocalDate dateCorrection, String userName);
 
     // 선택 일정 조회
     ScheduleResponseDto findScheduleById(int schedule_id);

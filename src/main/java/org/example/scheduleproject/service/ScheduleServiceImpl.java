@@ -10,6 +10,7 @@ import org.example.scheduleproject.repository.UserRepository;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +60,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
     // 전체 일정 조회
     @Override
-    public List<ScheduleResponseDto> findAllSchedule(Integer page, Integer size) {
+    public List<ScheduleResponseDto> findAllSchedule(Integer page, Integer size, LocalDate dateCorrection, String userName) {
         if (page == null | page == 0) page = 1;
         if (size == null) size = 5;
         int offset = (page - 1) * size;

@@ -40,9 +40,11 @@ public class ScheduleController {
     @GetMapping
     public ResponseEntity<List<ScheduleResponseDto>> findAllSchedule(
             @RequestParam Integer page,
-            @RequestParam Integer size
+            @RequestParam Integer size,
+            @RequestParam(required = false) LocalDate dateCorrection,
+            @RequestParam(required = false) String userName
     ) {
-        List<ScheduleResponseDto> schedules  = scheduleService.findAllSchedule(page, size);
+        List<ScheduleResponseDto> schedules  = scheduleService.findAllSchedule(page, size, dateCorrection, userName);
         return new ResponseEntity<>(schedules, HttpStatus.OK);
     }
 

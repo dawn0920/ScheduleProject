@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -62,6 +64,48 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                 rs.getString("date_correction") != null ? rs.getTimestamp("date_correction").toLocalDateTime().toLocalDate() : null,
                 rs.getInt("user_id")
         ), size, offset);
+    }
+
+    public List<Schedule> findAllSchedule(int size, int offset, LocalDate dateCorrection, String userName) {
+        StringBuilder sql = new StringBuilder("SELECT s.*, u.name AS user_name FROM schedule s " +
+                "JOIN users u ON s.user_id = u.id ");
+
+        List<Object> params = new ArrayList<>();
+
+        // 수정일 조건
+        if (dateCorrection != null) {
+            sql.append("WHERE DATE(s.date_correction) = ? ");
+            params.add(dateCorrection);
+        }
+
+        // 작성자명 조건
+        if (userName != null && !userName.isEmpty()) {
+            if (params.isEmpty()) {
+                sql.append("WHERE u.name = ? ");
+            } else {
+                sql.append("AND u.name = ? ");
+            }
+            params.add(userName);
+        }
+
+        // 수정일 기준 내림차순 정렬
+        sql.append("ORDER BY s.date_correction DESC ");
+
+        // 페이징 처리
+        sql.append("LIMIT ? OFFSET ?");
+        params.add(size);
+        params.add(offset);
+
+        // SQL 실행
+        return jdbcTemplate.query(sql.toString(), params.toArray(), (rs, rowNum) -> new Schedule(
+                rs.getInt("schedule_id"),
+                rs.getString("schedule"),
+                rs.getString("user_name"),
+                rs.getString("password"),
+                rs.getTimestamp("date_post").toLocalDateTime().toLocalDate(),
+                rs.getString("date_correction") != null ? rs.getTimestamp("date_correction").toLocalDateTime().toLocalDate() : null,
+                rs.getInt("user_id")
+        ));
     }
 
     @Override
